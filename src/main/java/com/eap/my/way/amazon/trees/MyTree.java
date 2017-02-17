@@ -42,6 +42,9 @@ public class MyTree {
         System.out.println("Lower common ancestor: " + myTree.findLowerCommonAncestor(myTree.getRoot(),14,10).getKey());
         System.out.println("Path length: " + (myTree.findPathLength(myTree.getRoot(),14)-1));
         System.out.println("Distance between 2 nodes is: " + myTree.findDistanceBetweenNodes(myTree.root,4,20));
+        System.out.println("Remove node with key == 10 " + myTree.delete(myTree.getRoot(),10));
+        System.out.println("PreOrder traversal : ");
+        myTree.preOrderTreeWalk(myTree.getRoot());
     }
 
 
@@ -70,6 +73,92 @@ public class MyTree {
         }
     }
 
+    public boolean delete(MyTreeNode root, int key) {// Удаление узла с заданным ключом
+        // (предполагается, что дерево не пусто)
+        MyTreeNode current = root;
+        MyTreeNode parent = root;
+        boolean isLeftChild = true;
+
+        while (current.getKey() != key) { // Поиск узла
+            parent = current;
+            if (key < current.getKey()) // Двигаться налево?
+            {
+                isLeftChild = true;
+                current = current.getLeft();
+            } else // Или направо?
+            {
+                isLeftChild = false;
+                current = current.getRight();
+            }
+            if (current == null) // Конец цепочки
+                return false; // Узел не найден
+        }
+// Удаляемый узел найден
+// Если узел не имеет потомков, он просто удаляется.
+        if (current.getLeft() == null && current.getRight() == null) {
+            if (current == root) // Если узел является корневым,
+                root = null; // дерево очищается
+            else if (isLeftChild)
+                parent.setLeft(null); // Узел отсоединяется
+            else // от родителя
+                parent.setRight(null);
+        }
+        return true;
+    }
+/*
+// Если нет правого потомка, узел заменяется левым поддеревом
+        else if(current.getRight() == null)
+            if(current == root)
+                root = current.getLeft();
+            else if(isLeftChild)
+                parent.setLeft(current.getLeft());
+            else
+                parent.setRight(current.getLeft());
+// Если нет левого потомка, узел заменяется правым поддеревом
+        else if(current.getLeft() == null)
+            if(current == root)
+                root = current.getRight();
+            else if(isLeftChild)
+                parent.setLeft(current.getRight());
+            else
+                parent.setRight(current.getRight());
+        else {// Два потомка, узел заменяется преемником
+
+// Поиск преемника для удаляемого узла (current)
+            MyTreeNode successor = getSuccessor(current);
+// Родитель current связывается с посредником
+            if(current == root)
+                root = successor;
+            else if(isLeftChild)
+                parent.setLeft(successor);
+            else
+                parent.setRight(successor);
+// Преемник связывается с левым потомком current
+            return true; // Признак успешного завершения
+        }
+*/
+
+
+
+    private MyTreeNode getSuccessor(MyTreeNode delNode)
+    {
+        MyTreeNode successorParent = delNode;
+        MyTreeNode successor = delNode;
+        MyTreeNode current = delNode.getRight(); // Переход к правому потомку
+        while(current != null) // Пока остаются левые потомки
+        {
+            successorParent = successor;
+            successor = current;
+            current = current.getLeft(); // Переход к левому потомку
+        }
+// Если преемник не является
+        if(successor != delNode.getRight()) // правым потомком,
+        { // создать связи между узлами
+            successorParent.setLeft(successor.getRight());
+            successor.setRight(delNode.getRight());
+        }
+        return successor;
+    }
 
     //Find a distance between 2 nodes
     public int findDistanceBetweenNodes(MyTreeNode root, int keyOne, int keyTwo) {
@@ -78,7 +167,7 @@ public class MyTree {
         int lcaKey = findLowerCommonAncestor(root,keyOne,keyTwo).getKey();
         int lcaDistance = findPathLength(root,lcaKey) - 1;
         return (x + y) - 2 * lcaDistance;
-    }   
+    }
 
     //Find Path length
     public int findPathLength(MyTreeNode root, int key) {
