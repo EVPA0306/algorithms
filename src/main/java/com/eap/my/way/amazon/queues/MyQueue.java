@@ -1,4 +1,4 @@
-package com.eap.my.way.amazon;
+package com.eap.my.way.amazon.queues;
 
 /**
  * Created by evgenypavlenko on 2/10/17.

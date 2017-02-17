@@ -1,4 +1,4 @@
-package com.eap.my.way.amazon;
+package com.eap.my.way.amazon.lists;
 
 /**
  * Created by evgenypavlenko on 2/14/17.

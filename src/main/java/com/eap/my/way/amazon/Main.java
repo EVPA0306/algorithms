@@ -1,5 +1,8 @@
 package com.eap.my.way.amazon;
 
+import com.eap.my.way.amazon.queues.MyQueue;
+import com.eap.my.way.amazon.stacks.MyStack;
+
 /**
  * Created by evgenypavlenko on 2/10/17.
  */
